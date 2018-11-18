@@ -18,7 +18,14 @@ public class Vehicle {
     private double Velocity;
     private double Acceleration;
     
-     public int getVehId()
+    public Vehicle(int VehId)
+    {
+        this.VehId = VehId;
+        this.Velocity = 0;
+        this.Acceleration = 0;
+    }
+    
+    public int getVehId()
     {
         return this.VehId;
         
@@ -42,4 +49,19 @@ public class Vehicle {
       return this.Acceleration;
         
     }
+   
+   public void setVehicleLocation(Cell loc) {
+   
+       this.Location = loc;
+   }
+   
+   public void setVehicleVelocity(double vel) {
+   
+       this.Velocity = vel;
+   }
+   
+   public void setVehicleAcceleration(double acc) {
+   
+       this.Acceleration = acc;
+   }
 }

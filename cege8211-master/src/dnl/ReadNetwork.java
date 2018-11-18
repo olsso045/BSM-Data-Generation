@@ -5,20 +5,9 @@
  */
 package dnl;
 
-import dnl.link.MN;
 import dnl.link.CTM;
-import dnl.link.CentroidConnector;
-import dnl.link.LTM;
 import dnl.link.Link;
-import dnl.link.PointQueue;
-import dnl.link.SpatialQueue;
-import dnl.node.Diverge;
-import dnl.node.UnblockedDiverge;
-import dnl.node.Series;
-import dnl.node.Merge;
 import dnl.node.Node;
-import dnl.node.PedSignal;
-import dnl.node.Signal;
 import dnl.node.Sink;
 import dnl.node.Source;
 import java.io.File;
@@ -43,31 +32,13 @@ public class ReadNetwork
      */
     public static final String SOURCE = "source";
     public static final String SINK = "sink";
-    public static final String SERIES = "series";
-    public static final String DIVERGE = "diverge";
-    public static final String UNBLOCKED_DIVERGE = "unblocked-diverge";
-    public static final String MERGE = "merge";
-    public static final String SIGNAL = "signal";
-    public static final String PED_SIGNAL = "ped-signal";
     
     /**
      * These are Link types. They are not case-sensitive.
      * They are used in the type field in the links.txt input file.
      */
-    public static final String CTM = "CTM";
-    public static final String LTM = "LTM";
-    public static final String CENTROID_CONNECTOR = "centroid-connector";
-    public static final String POINT_QUEUE = "point-queue";
-    public static final String SPATIAL_QUEUE = "spatial-queue";
-    public static final String MN = "mn";
-    
-    
-    
-    
-    
-    
-    
-    
+    public static final String CTM = "CTM";  
+      
     private Map<Integer, Node> nodesmap;
     private Map<Integer, Link> linksmap;
     
@@ -91,7 +62,6 @@ public class ReadNetwork
         
         readNodes(new File("networks/"+name+"/nodes.txt"));
         readLinks(new File("networks/"+name+"/links.txt"));
-        readSignals(new File("networks/"+name+"/signals.txt"), new File("networks/"+name+"/phases.txt"));
         
         
         readTurningProportions(new File("networks/"+name+"/turning_proportions.txt"));
@@ -132,30 +102,6 @@ public class ReadNetwork
         {
             return new Sink(id, longitude, latitude, elevation);
         }
-        else if(type.equalsIgnoreCase(SERIES))
-        {
-            return new Series(id, longitude, latitude, elevation);
-        }
-        else if(type.equalsIgnoreCase(DIVERGE))
-        {
-            return new Diverge(id, longitude, latitude, elevation);
-        }
-        else if(type.equalsIgnoreCase(UNBLOCKED_DIVERGE))
-        {
-            return new UnblockedDiverge(id, longitude, latitude, elevation);
-        }
-        else if(type.equalsIgnoreCase(MERGE))
-        {
-            return new Merge(id, longitude, latitude, elevation);
-        }
-        else if(type.equalsIgnoreCase(SIGNAL))
-        {
-            return new Signal(id, longitude, latitude, elevation);
-        }
-        else if(type.equalsIgnoreCase(PED_SIGNAL))
-        {
-            return new PedSignal(id, longitude, latitude, elevation);
-        }
         else
         {
             throw new RuntimeException("Node type not recognized: "+type);
@@ -174,26 +120,6 @@ public class ReadNetwork
         if(type.equalsIgnoreCase(CTM))
         {
             return new CTM(id, source, dest, length, ffspeed, capacity, numLanes);
-        }
-        else if(type.equalsIgnoreCase(LTM))
-        {
-            return new LTM(id, source, dest, length, ffspeed, capacity, numLanes);
-        }
-        else if(type.equalsIgnoreCase(POINT_QUEUE))
-        {
-            return new PointQueue(id, source, dest, length, ffspeed, capacity, numLanes);
-        }
-        else if(type.equalsIgnoreCase(SPATIAL_QUEUE))
-        {
-            return new SpatialQueue(id, source, dest, length, ffspeed, capacity, numLanes);
-        }
-        else if(type.equalsIgnoreCase(CENTROID_CONNECTOR))
-        {
-            return new CentroidConnector(id, source, dest, length, ffspeed, capacity, numLanes);
-        }
-        else if(type.equalsIgnoreCase(MN))
-        {
-            return new MN(id, source, dest, length, ffspeed, capacity, numLanes);
         }
         else
         {
@@ -369,103 +295,5 @@ public class ReadNetwork
      * Note that signal cycle data will only be stored for nodes that are actual signals. Otherwise, it will be ignored.
      * This method reads two files: first, it looks at signals.txt to calculate the offset. Then, it looks at phases.txt to read signal phases
      */
-    public void readSignals(File signals, File phases) throws IOException
-    {
-        Scanner filein = new Scanner(signals);
-        
-        while(!filein.hasNextInt() && filein.hasNextLine())
-        {
-            filein.nextLine();
-        }
-        
-        while(filein.hasNextInt())
-        {
-            int node_id = filein.nextInt();
-            double offset = filein.nextDouble();
-            
-            Node node = nodesmap.get(node_id);
-            
-            if(node == null)
-            {
-                throw new RuntimeException("Cannot find node "+node_id);
-            }
-            
-            if(node instanceof Signal)
-            {
-                ((Signal)node).setOffset(offset);
-            }
-            
-            if(filein.hasNextLine())
-            {
-                filein.nextLine();
-            }
-        }
-        filein.close();
-        
-        filein = new Scanner(phases);
-        
-        while(!filein.hasNextInt() && filein.hasNextLine())
-        {
-            filein.nextLine();
-        }
-        
-        while(filein.hasNextInt())
-        {
-            int node_id = filein.nextInt();
-            String type = filein.next();
-            int sequence = filein.nextInt();
-            double all_red = filein.nextDouble();
-            double yellow = filein.nextDouble();
-            double green = filein.nextDouble();
-            
-            int num_moves = filein.nextInt();
-            
-            String line = filein.nextLine();
-            
-            // String[] containing ids of incoming links
-            String[] inc_links = line.substring(line.indexOf('{')+1, line.indexOf('}')).split(",");
-            
-            // String[] containing ids of outgoing links
-            line = line.substring(line.indexOf('}')+1);
-            String[] out_links = line.substring(line.indexOf('{')+1, line.indexOf('}')).split(",");
-            
-            // this is a list of protected turning movements
-            List<Link[]> protected_turns = new ArrayList<>();
-            
-            for(int idx = 0; idx < num_moves; idx++)
-            {
-                int i_id = Integer.parseInt(inc_links[idx].trim());
-                int j_id = Integer.parseInt(out_links[idx].trim());
-                
-                Link i = linksmap.get(i_id);
-                Link j = linksmap.get(j_id);
-                
-                if(i == null)
-                {
-                    throw new RuntimeException("Cannot find link "+i_id);
-                }
-                
-                if(j == null)
-                {
-                    throw new RuntimeException("Cannot find link "+j_id);
-                }
-                
-                protected_turns.add(new Link[]{i, j});
-            }
-            
-            Node node = nodesmap.get(node_id);
-            
-            if(node == null)
-            {
-                throw new RuntimeException("Cannot find node "+node_id);
-            }
-            
-            if(node instanceof Signal)
-            {
-                ((Signal)node).addPhase(sequence, green, yellow, all_red, protected_turns);
-            }
-        }
-        
-    }
-    
+  
 }

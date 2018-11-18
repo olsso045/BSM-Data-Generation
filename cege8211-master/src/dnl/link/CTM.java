@@ -6,7 +6,9 @@
 package dnl.link;
 
 import dnl.Params;
+import dnl.Vehicle;
 import dnl.node.Node;
+import java.util.List;
 
 
 
@@ -27,6 +29,7 @@ public class CTM extends Link
     private double ffspd;
     private double length;
     public double shockwavespd;
+    
     
     public CTM(int id, Node source, Node dest, double length, double ffspd, double capacityPerLane, int numLanes)
     {
@@ -79,34 +82,36 @@ public class CTM extends Link
         }
     }
     
-    public double getSendingFlow()
+    public int getSendingFlow()
     {
         // fill this in
-        return cells[CellNumber-1].getSendingFlow();
+        return (int) cells[CellNumber-1].getSendingFlow();
     }
     
-    public double getReceivingFlow()
+    public int getReceivingFlow()
     {
         // fill this in
-        return cells[0].getReceivingFlow();
+        return (int) cells[0].getReceivingFlow();
         //:-)
     }
     
-    public void addFlow(double y)
+    public void addFlow(Vehicle y)
     {
         // fill this in
         
-        cells[0].InFlow = y;
-        System.out.println("Add flow    "+y+"   "+getId()+" "+Params.time);
+        cells[0].VehiclesInCell.add(y);
+      //  System.out.println("Add flow    "+y+"   "+getId()+" "+Params.time);
         
     }
     
-    public void removeFlow(double y)
+    public void removeFlow(int y)
     {
         // fill this in
-        
-        cells[CellNumber-1].OutFlow = y;
-        System.out.println("Remove flow    "+y+"   "+getId()+" "+Params.time);
+        for(int i = 0; i < y; i++)
+            {
+            cells[CellNumber-1].VehiclesInCell.remove(0);
+            }
+        //System.out.println("Remove flow    "+y+"   "+getId()+" "+Params.time);
         
     }
 }

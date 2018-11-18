@@ -5,6 +5,7 @@
  */
 package dnl.link;
 
+import dnl.Vehicle;
 import dnl.node.Node;
 
 /**
@@ -176,7 +177,7 @@ public abstract class Link implements Comparable<Link>
      * This method is called when vehicles enter the link!
      * This is usually called by the Node step() method.
      */
-    public abstract void addFlow(double y);
+    public abstract void addFlow(Vehicle y);
     
     
     
@@ -186,24 +187,18 @@ public abstract class Link implements Comparable<Link>
      * This is usually called by the Node step() method.
      * @param y 
      */
-    public abstract void removeFlow(double y);
+    public abstract void removeFlow(int y);
     
     /**
      * Returns the maximum flow that could exit the link in the next time step (in veh)
      */
-    public abstract double getSendingFlow();
+    public abstract int getSendingFlow();
     
     
     /**
      * Returns the maximum flow that could enter the link in the next time step (in veh)
      */
-    public abstract double getReceivingFlow();
-    
-    
-    
-    
-    
-    
+    public abstract int getReceivingFlow();
     
     
     /**

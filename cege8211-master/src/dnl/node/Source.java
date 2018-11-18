@@ -6,8 +6,11 @@
 package dnl.node;
 
 import dnl.Params;
+import dnl.Vehicle;
 import dnl.link.Link;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -17,6 +20,10 @@ import java.util.TreeMap;
  */
 public class Source extends Node
 {
+    
+    public int SourceCounter = 0;
+    
+    public List SourceVehicles; //create list instead of array since size needs to change
     
     /**
      * This stores the rate of demand as a map between final time and rate of demand.
@@ -30,6 +37,10 @@ public class Source extends Node
         super(id, longitude, latitude, elevation);
         
         demand_rates = new HashMap<>();
+        
+        SourceCounter = 0;
+        
+        this.SourceVehicles = new ArrayList(); //create list instead of array since size needs to change
     }
     
     /**
@@ -60,6 +71,7 @@ public class Source extends Node
          * If the demand applies for part of the time interval, scale the rate proportionally to the overlap.
          */
         
+               
         double rate = 0.0;
         
         for(Double[] times : demand_rates.keySet())
@@ -76,10 +88,28 @@ public class Source extends Node
         // now add demand at the given rate
         double newDemand = rate * Params.dt / 3600.0;
         
+        
+              
         // split it according to turning proportions
         for(Link ds : getOutgoing())
         {
-            ds.addFlow(newDemand * getTurningProp(null, ds));
+            int CarNumb = (int) Math.round(newDemand * getTurningProp(null, ds));
+            
+            for(int i = 0; i < CarNumb; i++)
+            {
+                SourceCounter += 1;
+                Vehicle car = new Vehicle(SourceCounter);
+                SourceVehicles.add(car); // thiz iz for a lizt
+            }
+            int addDemand = (int) (newDemand * getTurningProp(null, ds));
+            //ds.addFlow((int) (newDemand * getTurningProp(null, ds)));
+            
+            for(int i = 0; i < addDemand; i++)
+            {
+                Vehicle MoveVehicle = (Vehicle) SourceVehicles.get(0);
+                ds.addFlow(MoveVehicle);
+                SourceVehicles.remove(0); //thiz iz for a lizt
+            }
         }
     }
     
@@ -97,10 +127,10 @@ public class Source extends Node
     {
         public void step(){}
         public void update(){}
-        public double getSendingFlow(){return 0;}
-        public double getReceivingFlow(){return 0;}
-        public void addFlow(double y){}
-        public void removeFlow(double y){}
+        public int getSendingFlow(){return 0;}
+        public int getReceivingFlow(){return 0;}
+        public void addFlow(Vehicle y){}
+        public void removeFlow(int y){}
     };
     
     public void storeTurningProportion(Link i, Link j, double p)
