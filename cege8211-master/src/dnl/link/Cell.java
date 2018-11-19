@@ -4,8 +4,11 @@
  * and open the template in the editor.
  */
 package dnl.link;
+import static dnl.Main.stringer;
+import static dnl.Main.writer;
 import dnl.Params;
 import dnl.Vehicle;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
         
@@ -22,11 +25,14 @@ public class Cell
      * Having a reference is useful...
      */
     private CTM link;
+    private int CellId;
     private double Q;
     private double N;
     private double en = 0.0;
     public double InFlow = 0.0;
     public double OutFlow = 0.0;
+    
+    public StringBuilder BSMOutput;
     
     public List VehiclesInCell;
     public List IntercellVehicleInFlow; //vehicles that will move to next cell (used so that cells can reference previous cell's list of vehicles
@@ -73,7 +79,10 @@ public class Cell
         this.prev = prev;
     }
     
-    
+    public void setCellId(int id)
+    {
+        this.CellId = id;
+    }
     
     public void step()
     {
@@ -87,14 +96,14 @@ public class Cell
         }
         
         if(prev!=null) {
-            for(int i = 0; i < InFlow; i++)
+            for(int i = 0; i < Math.floor(InFlow); i++)
         {
                 Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(0);
                 this.IntercellVehicleInFlow.add(MoveVehicle);       
         }
         }
         
-        for(int i = 0; i < OutFlow; i++)
+        for(int i = 0; i < Math.floor(OutFlow); i++)
         {
             Vehicle MoveVehicle = (Vehicle) this.VehiclesInCell.get(0);
             this.IntercellVehicleOutFlow.add(MoveVehicle);
@@ -102,14 +111,15 @@ public class Cell
         
     }
     
-    public void update()
+    public void update() throws IOException
     {
         // fill this in
         
         for(int i = 0; i < IntercellVehicleInFlow.size(); i++)
         {
             Vehicle MoveVehicle = (Vehicle) this.IntercellVehicleInFlow.get(i);
-            this.VehiclesInCell.add(MoveVehicle);   
+            MoveVehicle.setVehicleLocation(this);
+            this.VehiclesInCell.add(MoveVehicle); 
         }
         
         for(int i = 0; i < IntercellVehicleOutFlow.size(); i++)
@@ -123,9 +133,39 @@ public class Cell
         
         en = en + InFlow - OutFlow;
         
+        int StoredOutFlow = (int) Math.floor(OutFlow);
         InFlow = 0;
         OutFlow = 0;
-   
+        
+
+        if(this.VehiclesInCell!=null) {
+            BSMOutput = new StringBuilder();
+            for (Object car : this.VehiclesInCell) {
+                int VehId = ((Vehicle)car).getVehId();
+                int TimeStep = Params.time;
+                double CellSize = this.link.getFFSpeed()*Params.dt/3600;
+                double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
+                double YCoord = 0;
+                double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
+                String Acceleration = "n/a";              
+                
+                BSMOutput.append(Integer.toString(VehId));
+                BSMOutput.append(",");
+                BSMOutput.append(Integer.toString(TimeStep));
+                BSMOutput.append(",");
+                BSMOutput.append(Double.toString(CurrentCell));
+                BSMOutput.append(",");
+                BSMOutput.append(Double.toString(YCoord));
+                BSMOutput.append(",");
+                BSMOutput.append(Double.toString(Speed));
+                BSMOutput.append(",");
+                BSMOutput.append(Acceleration);
+                BSMOutput.append("\n");
+        
+                writer.write(BSMOutput.toString());  
+            }
+        }
+        
     }
     
     public double getSendingFlow()

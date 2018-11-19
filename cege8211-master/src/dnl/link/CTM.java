@@ -31,6 +31,8 @@ public class CTM extends Link
     public double shockwavespd;
     
     
+    
+    
     public CTM(int id, Node source, Node dest, double length, double ffspd, double capacityPerLane, int numLanes)
     {
         super(id, source, dest, length, ffspd, capacityPerLane, numLanes);
@@ -49,6 +51,7 @@ public class CTM extends Link
       
         for (int i=0; i<CellNumber; i++) {
             cells[i] = new Cell(this);
+            cells[i].setCellId(i+1);
         }
         
         for (int i=0; i<CellNumber; i++) {
@@ -98,7 +101,7 @@ public class CTM extends Link
     public void addFlow(Vehicle y)
     {
         // fill this in
-        
+        y.setVehicleLocation(cells[0]);
         cells[0].VehiclesInCell.add(y);
       //  System.out.println("Add flow    "+y+"   "+getId()+" "+Params.time);
         

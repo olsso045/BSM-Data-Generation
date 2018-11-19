@@ -37,14 +37,13 @@ public class Main {
         writer = new BufferedWriter(new FileWriter(CTMOutput));
         stringer = new StringBuilder();
         
-        stringer.append("Vehicle ID,Time,X-Coord,Y-Coord,Velocity,Acceleration");
+        stringer.append("Vehicle ID,Time,X-Coord,Y-Coord,Velocity,Acceleration\n");
         
-        writer.write(stringer.toString());
-        
-        writer.close();
+        writer.write(stringer.toString());       
         
         network.simulate();
         
+        writer.close();
     }
     
 }
