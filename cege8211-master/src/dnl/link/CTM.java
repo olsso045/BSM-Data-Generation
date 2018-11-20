@@ -64,7 +64,7 @@ public class CTM extends Link
             if(i<CellNumber-1) {
                 cells[i].setNextCell(cells[i+1]);
             }
-//            :)
+//            :)  :)   :)   :)  :)   :)   :)  :) :)  :)   :)   :)  :)   :)   :)  :)  :)  :)   :)   :)  :)   :)   :)  :)
         }
         
     }
@@ -107,6 +107,7 @@ public class CTM extends Link
     public void addFlow(Vehicle y)
     {
         // fill this in
+        cells[0].InFlow += 1;
         y.setVehicleLocation(cells[0]);
         cells[0].VehiclesInCell.add(y);
       //  System.out.println("Add flow    "+y+"   "+getId()+" "+Params.time);
@@ -116,11 +117,13 @@ public class CTM extends Link
     public void removeFlow(int y)
     {
         // fill this in
+        cells[CellNumber-1].OutFlow += 1;
         for(int i = 0; i < y; i++)
             {
-            cells[CellNumber-1].VehiclesInCell.remove(0);
+                cells[CellNumber-1].VehiclesInCell.remove(0);
             }
         //System.out.println("Remove flow    "+y+"   "+getId()+" "+Params.time);
         
     }
 }
+

@@ -31,7 +31,7 @@ public class Main {
         //System.out.println(Autograde.gradeHW(new File("HW6.txt")));
         
         ReadNetwork read = new ReadNetwork();
-        Network network = read.createNetwork("CTM1");
+        Network network = read.createNetwork("ctm1");
         
         String CTMOutput = "C:\\Users\\chen4416.AD\\Desktop\\BSM-Data-Generation-master\\OUTPUT\\CTMOutput.csv";
         writer = new BufferedWriter(new FileWriter(CTMOutput));
