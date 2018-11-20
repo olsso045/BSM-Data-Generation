@@ -111,7 +111,7 @@ public class Cell
         
     }
     
-    public void update() throws IOException
+    public void update() throws Exception
     {
         // fill this in
         
@@ -149,15 +149,15 @@ public class Cell
                 double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
                 String Acceleration = "n/a";              
                 
-                BSMOutput.append(Integer.toString(VehId));
+                BSMOutput.append(VehId);
                 BSMOutput.append(",");
-                BSMOutput.append(Integer.toString(TimeStep));
+                BSMOutput.append(TimeStep);
                 BSMOutput.append(",");
-                BSMOutput.append(Double.toString(CurrentCell));
+                BSMOutput.append(CurrentCell);
                 BSMOutput.append(",");
-                BSMOutput.append(Double.toString(YCoord));
+                BSMOutput.append(YCoord);
                 BSMOutput.append(",");
-                BSMOutput.append(Double.toString(Speed));
+                BSMOutput.append(Speed);
                 BSMOutput.append(",");
                 BSMOutput.append(Acceleration);
                 BSMOutput.append("\n");

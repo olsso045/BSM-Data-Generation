@@ -33,7 +33,7 @@ public class Main {
         ReadNetwork read = new ReadNetwork();
         Network network = read.createNetwork("CTM1");
         
-        String CTMOutput = "C:\\Users\\olsso045\\Documents\\BSM\\CTMOutput.csv";
+        String CTMOutput = "C:\\Users\\chen4416.AD\\Desktop\\BSM-Data-Generation-master\\OUTPUT\\CTMOutput.csv";
         writer = new BufferedWriter(new FileWriter(CTMOutput));
         stringer = new StringBuilder();
         

@@ -9,6 +9,8 @@ import dnl.Params;
 import dnl.Vehicle;
 import dnl.node.Node;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -81,7 +83,11 @@ public class CTM extends Link
     {
         // fill this in
         for(Cell section : cells) {
-            section.update();
+            try {
+                section.update();
+            } catch (Exception ex) {
+                Logger.getLogger(CTM.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
