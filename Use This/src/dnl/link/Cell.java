@@ -181,6 +181,9 @@ public class Cell
         if(this.VehiclesInCell!=null) {
             BSMOutput = new StringBuilder();
             for (Object car : this.VehiclesInCell) {
+                if(Params.time == 6){
+                    System.out.println(this.VehiclesInCell + "," + this.CellId);
+                }
                 int VehId = ((Vehicle)car).getVehId();
                 if(VehId == 1) {
                     StoredOutFlow = 1;
