@@ -1,3 +1,3 @@
 dt	6
-duration	600
+duration	1500
 jam_density	264

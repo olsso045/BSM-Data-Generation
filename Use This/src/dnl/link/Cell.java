@@ -102,8 +102,8 @@ public class Cell
             InFlow = Math.min(prev.getSendingFlow(), this.getReceivingFlow());
         }
         
-        if(this.CellId == 4) { // to add a bottleneck
-            if(Params.time <= 500 && Params.time >= 300) {
+        if(this.CellId == 4) { // to add a bottleneck to cell 4 for 50 seconds
+            if(Params.time <= 350 && Params.time >= 300) {
                 OutFlow = 0;
             }
         }
@@ -111,19 +111,26 @@ public class Cell
         
         if(prev!=null) {
             for(int i = 0; i < Math.floor(InFlow); i++)
-        {               
-                Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(0);
-                this.IntercellVehicleInFlow.add(MoveVehicle);       
+        {       if(this.prev.VehiclesInCell.isEmpty()) {
+                    break;
+                }
+                else {        
+                    Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(0);
+                    this.IntercellVehicleInFlow.add(MoveVehicle);      
+        }
         }
         }
         
-        if(OutFlow!=0) {
             for(int i = 0; i < Math.floor(OutFlow); i++)
             {
-                Vehicle MoveVehicle = (Vehicle) this.VehiclesInCell.get(0);
-                this.IntercellVehicleOutFlow.add(MoveVehicle);
+                if(this.VehiclesInCell.isEmpty()) {
+                    break;
+                }
+                else {  
+                    Vehicle MoveVehicle = (Vehicle) this.VehiclesInCell.get(0);
+                    this.IntercellVehicleOutFlow.add(MoveVehicle);
             }
-        }
+            }
     }
     
     public void update() throws Exception
@@ -150,6 +157,7 @@ public class Cell
         en = en + InFlow - OutFlow;
         
         int StoredOutFlow = (int) Math.floor(OutFlow);
+
         InFlow = 0;
         OutFlow = 0;
         
@@ -174,11 +182,15 @@ public class Cell
             BSMOutput = new StringBuilder();
             for (Object car : this.VehiclesInCell) {
                 int VehId = ((Vehicle)car).getVehId();
+                if(VehId == 1) {
+                    StoredOutFlow = 1;
+                     }
                 double CellSize = this.link.getFFSpeed()*Params.dt/3600;
                 double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
                 double YCoord = 0;
                 double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
                 String Acceleration = "n/a";              
+                
                 
                 BSMOutput.append(VehId);
                 BSMOutput.append(",");

@@ -60,8 +60,7 @@ public class Source extends Node
             demand_rates.put(time, demand);
         }
     }
-    
-    
+       
     public void step()
     {
         /**
@@ -71,14 +70,14 @@ public class Source extends Node
          * If the demand applies for part of the time interval, scale the rate proportionally to the overlap.
          */
         
-               
         double rate = 0.0;
         
         for(Double[] times : demand_rates.keySet())
         {
+            
             double start_time = Math.max(Params.time, times[0]);
             double end_time = Math.min(Params.time + Params.dt, times[1]);
-            
+
             if(end_time >= start_time)
             {
                 rate += demand_rates.get(times) * (end_time - start_time) / Params.dt;
@@ -86,26 +85,25 @@ public class Source extends Node
         }
         
         // now add demand at the given rate
-        double newDemand = rate * Params.dt / 3600.0;
+        double newDemand = rate * Params.dt/3600.0;     
         
-        
-              
         // split it according to turning proportions
         for(Link ds : getOutgoing())
         {
             int CarNumb = (int) Math.round(newDemand * getTurningProp(null, ds));
-            
+
             for(int i = 0; i < CarNumb; i++)
-            {
+            {                
                 SourceCounter += 1;
                 Vehicle car = new Vehicle(SourceCounter);
                 SourceVehicles.add(car); // thiz iz for a lizt
             }
+            
             int addDemand = (int) (newDemand * getTurningProp(null, ds));
             //ds.addFlow((int) (newDemand * getTurningProp(null, ds)));
             
             for(int i = 0; i < addDemand; i++)
-            {
+            {               
                 Vehicle MoveVehicle = (Vehicle) SourceVehicles.get(0);
                 ds.addFlow(MoveVehicle);
                 SourceVehicles.remove(0); //thiz iz for a lizt
