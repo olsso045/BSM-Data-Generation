@@ -94,31 +94,40 @@ public class Cell
         
         if(next!=null) {
             
-            OutFlow = Math.min(this.getSendingFlow(), next.getReceivingFlow());      
+            OutFlow =  Math.floor(Math.min(this.getSendingFlow(), next.getReceivingFlow()));      
     //        System.out.print(next.getReceivingFlow());
         }
         if(prev!=null) {
             
-            InFlow = Math.min(prev.getSendingFlow(), this.getReceivingFlow());
+            InFlow =  Math.floor(Math.min(prev.getSendingFlow(), this.getReceivingFlow()));
         }
         
         if(this.CellId == 4) { // to add a bottleneck to cell 4 for 50 seconds
             if(Params.time <= 350 && Params.time >= 300) {
                 OutFlow = 0;
+                //System.out.println("During this time, the outFlow is 0 for cell: "+ this.CellId);
             }
         }
         
         
+        if(this.CellId == 5) { // to add a bottleneck to cell 4 for 50 seconds
+            if(Params.time <= 350 && Params.time >= 300) {
+                InFlow = 0;
+                //System.out.println("During this time, the InFlow is 0 for cell: "+ this.CellId);
+            }
+        }        
+        
         if(prev!=null) {
             for(int i = 0; i < Math.floor(InFlow); i++)
-        {       if(this.prev.VehiclesInCell.isEmpty()) {
+            {       
+                if(this.prev.VehiclesInCell.isEmpty()) {
                     break;
                 }
                 else {        
                     Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(0);
                     this.IntercellVehicleInFlow.add(MoveVehicle);      
-        }
-        }
+                }
+            }
         }
         
             for(int i = 0; i < Math.floor(OutFlow); i++)
@@ -129,7 +138,7 @@ public class Cell
                 else {  
                     Vehicle MoveVehicle = (Vehicle) this.VehiclesInCell.get(0);
                     this.IntercellVehicleOutFlow.add(MoveVehicle);
-            }
+                }
             }
     }
     
@@ -152,8 +161,7 @@ public class Cell
         
         this.IntercellVehicleInFlow = new ArrayList();
         this.IntercellVehicleOutFlow = new ArrayList();
-        
-        
+                
         en = en + InFlow - OutFlow;
         
         int StoredOutFlow = (int) Math.floor(OutFlow);
@@ -179,12 +187,14 @@ public class Cell
         
 
         if(this.VehiclesInCell!=null) {
-            BSMOutput = new StringBuilder();
+
             for (Object car : this.VehiclesInCell) {
-                if(Params.time == 6){
-                    System.out.println(this.VehiclesInCell + "," + this.CellId);
-                }
+                BSMOutput = new StringBuilder();
+                //if(Params.time == 6){
+                    //System.out.println(this.VehiclesInCell.get(0) + "," + this.CellId);
+                //}
                 int VehId = ((Vehicle)car).getVehId();
+                //System.out.println("Time: "+Params.time + " Vehicle: "+VehId+ " Cell: " + this.CellId);
                 if(VehId == 1) {
                     StoredOutFlow = 1;
                      }
@@ -193,8 +203,7 @@ public class Cell
                 double YCoord = 0;
                 double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
                 String Acceleration = "n/a";              
-                
-                
+                                
                 BSMOutput.append(VehId);
                 BSMOutput.append(",");
                 BSMOutput.append(TimeStep);

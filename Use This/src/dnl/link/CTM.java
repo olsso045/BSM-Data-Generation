@@ -86,7 +86,7 @@ public class CTM extends Link
             try {
                 section.update();
             } catch (Exception ex) {
-                Logger.getLogger(CTM.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("There are some error");
             }
         }
     }
