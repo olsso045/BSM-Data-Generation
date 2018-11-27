@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * This class models a source (origin node): vehicles spawn at this location at predetermined rates.
@@ -95,7 +96,8 @@ public class Source extends Node
             for(int i = 0; i < CarNumb; i++)
             {                
                 SourceCounter += 1;
-                Vehicle car = new Vehicle(SourceCounter);
+                int randomNum = ThreadLocalRandom.current().nextInt(1, 101);
+                Vehicle car = new Vehicle(SourceCounter, randomNum);
                 SourceVehicles.add(car); // thiz iz for a lizt
             }
             

@@ -25,6 +25,9 @@ public class Main {
     
     public static BufferedWriter writer2;
     public static StringBuilder stringer2;
+    
+    public static BufferedWriter writer3;
+    public static StringBuilder stringer3;
     /**
      * @param args the command line arguments
      */
@@ -34,7 +37,7 @@ public class Main {
         ReadNetwork read = new ReadNetwork();
         Network network = read.createNetwork("CTM1");
         
-        String CTMVehicleOutput = "D:\\BSM\\CTMVehicleOutput.csv";
+        String CTMVehicleOutput = "D:\\BSM\\CTMVehicleOutputAll.csv";
         writer = new BufferedWriter(new FileWriter(CTMVehicleOutput));
         stringer = new StringBuilder();
         
@@ -46,15 +49,25 @@ public class Main {
         writer2 = new BufferedWriter(new FileWriter(CTMCellOutput));
         stringer2 = new StringBuilder();
         
-        stringer2.append("Time, Cell #, Occupancy, Outflow\n");
+        stringer2.append("Time, Cell #, Inflow (vph), Previous Occupancy (# vehs), Outflow (vph), New Occupancy (# vehs), Density (veh/mi)\n");
         
         writer2.write(stringer2.toString());
+        
+        String CTMVehicleOutputPartial = "D:\\BSM\\CTMVehicleOutputFiltered.csv";
+        writer3 = new BufferedWriter(new FileWriter(CTMVehicleOutputPartial));
+        stringer3 = new StringBuilder();
+        
+        stringer3.append("Vehicle ID,Time,X-Coord,Y-Coord,Velocity,Acceleration\n");
+        
+        writer3.write(stringer3.toString());     
   
         network.simulate();
         
         writer.close();
         
         writer2.close();
+        
+        writer3.close();
     }
     
 }
