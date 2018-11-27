@@ -34,7 +34,7 @@ public class Main {
         ReadNetwork read = new ReadNetwork();
         Network network = read.createNetwork("CTM1");
         
-        String CTMVehicleOutput = "C:\\Users\\chen4416.AD\\Desktop\\BSM-Data-Generation-master_11_26\\CTMVehicleOutput.csv";
+        String CTMVehicleOutput = "D:\\BSM\\CTMVehicleOutput.csv";
         writer = new BufferedWriter(new FileWriter(CTMVehicleOutput));
         stringer = new StringBuilder();
         
@@ -42,7 +42,7 @@ public class Main {
         
         writer.write(stringer.toString());     
         
-        String CTMCellOutput = "C:\\Users\\chen4416.AD\\Desktop\\BSM-Data-Generation-master_11_26\\CTMCellOutput.csv";
+        String CTMCellOutput = "D:\\BSM\\CTMCellOutput.csv";
         writer2 = new BufferedWriter(new FileWriter(CTMCellOutput));
         stringer2 = new StringBuilder();
         

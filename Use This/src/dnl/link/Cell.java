@@ -124,7 +124,7 @@ public class Cell
                     break;
                 }
                 else {        
-                    Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(0);
+                    Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(i);
                     this.IntercellVehicleInFlow.add(MoveVehicle);      
                 }
             }
@@ -136,7 +136,7 @@ public class Cell
                     break;
                 }
                 else {  
-                    Vehicle MoveVehicle = (Vehicle) this.VehiclesInCell.get(0);
+                    Vehicle MoveVehicle = (Vehicle) this.VehiclesInCell.get(i);
                     this.IntercellVehicleOutFlow.add(MoveVehicle);
                 }
             }
@@ -190,14 +190,14 @@ public class Cell
 
             for (Object car : this.VehiclesInCell) {
                 BSMOutput = new StringBuilder();
-                //if(Params.time == 6){
-                    //System.out.println(this.VehiclesInCell.get(0) + "," + this.CellId);
-                //}
+                if(Params.time == 6){
+       //             System.out.println(this.VehiclesInCell.get(0) + "," + this.CellId);
+                }
                 int VehId = ((Vehicle)car).getVehId();
                 //System.out.println("Time: "+Params.time + " Vehicle: "+VehId+ " Cell: " + this.CellId);
-                if(VehId == 1) {
-                    StoredOutFlow = 1;
-                     }
+         //       if(VehId == 1) {
+         //           StoredOutFlow = 1;
+         //            }
                 double CellSize = this.link.getFFSpeed()*Params.dt/3600;
                 double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
                 double YCoord = 0;
@@ -219,21 +219,16 @@ public class Cell
         
                 writer.write(BSMOutput.toString());  
             }
-        }
-        
+        }    
     }
     
     public double getSendingFlow()
     {
-        // fill this in
         return Math.min(Q, en);
     }
     
     public double getReceivingFlow()
     {
-        // fill this in
-        
-        return Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-en));
-        
+        return Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-en));  
     }
 }

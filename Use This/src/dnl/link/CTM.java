@@ -86,7 +86,7 @@ public class CTM extends Link
             try {
                 section.update();
             } catch (Exception ex) {
-                System.out.println("There are some error");
+                System.out.println("There are some errors");
             }
         }
     }
