@@ -20,7 +20,7 @@ public class Params
     
     
     // this is the end time of the simulation, in s. The maximum number of time steps is DURATION/dt.
-    public static int DURATION = 1000;
+    public static int DURATION = 3600;
     
     // jam density in veh/mi: assume 20ft/vehicle
     public static double VEHICLE_LENGTH = 20;

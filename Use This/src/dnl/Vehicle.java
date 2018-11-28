@@ -17,12 +17,14 @@ public class Vehicle {
     private Cell Location;
     private double Velocity;
     private double Acceleration;
+    private int RandomizedId;
     
-    public Vehicle(int VehId)
+    public Vehicle(int VehId, int RandomizedId)
     {
         this.VehId = VehId;
         this.Velocity = 0;
         this.Acceleration = 0;
+        this.RandomizedId = RandomizedId;
     }
     
     public int getVehId()
@@ -47,6 +49,12 @@ public class Vehicle {
    public double getVehAcceleration()
   {
       return this.Acceleration;
+        
+    }
+   
+   public int getVehRandomizedId()
+  {
+      return this.RandomizedId;
         
     }
    

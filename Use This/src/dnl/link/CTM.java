@@ -42,11 +42,12 @@ public class CTM extends Link
         this.ffspd = ffspd;
         this.length = length;
         
-        this.shockwavespd = 6.78294574;
+        this.shockwavespd = 5.528008577;
         
         double qualifier = Math.max(this.ffspd, this.shockwavespd);
                 
         CellSize = qualifier*Params.dt/3600;
+     //   System.out.println(CellSize);
         CellNumber = (int) Math.round(this.length/CellSize);
         
         cells = new Cell[CellNumber];
@@ -86,7 +87,7 @@ public class CTM extends Link
             try {
                 section.update();
             } catch (Exception ex) {
-                System.out.println("There are some error");
+                System.out.println("There are some errors");
             }
         }
     }
