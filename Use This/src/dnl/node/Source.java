@@ -22,7 +22,7 @@ public class Source extends Node
 {
     
     public int SourceCounter = 0;
-    
+    public double newDemand;
     public List SourceVehicles; //create list instead of array since size needs to change
     
     /**
@@ -85,7 +85,7 @@ public class Source extends Node
         }
         
         // now add demand at the given rate
-        double newDemand = rate * Params.dt/3600.0;     
+        this.newDemand = rate * Params.dt/3600.0;     
         
         // split it according to turning proportions
         for(Link ds : getOutgoing())
@@ -99,7 +99,7 @@ public class Source extends Node
                 SourceVehicles.add(car); // thiz iz for a lizt
             }
             
-            int addDemand = (int) (newDemand * getTurningProp(null, ds));
+            int addDemand = (int) Math.min((newDemand * getTurningProp(null, ds)),ds.getReceivingFlow());
             //ds.addFlow((int) (newDemand * getTurningProp(null, ds)));
             
             for(int i = 0; i < addDemand; i++)

@@ -10,6 +10,7 @@ import static dnl.Main.stringer2;
 import static dnl.Main.writer2;
 import dnl.Params;
 import dnl.Vehicle;
+import dnl.node.Source;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -206,8 +207,10 @@ public class Cell
                 int VehId = ((Vehicle)car).getVehId();
                 //System.out.println("Time: "+Params.time + " Vehicle: "+VehId+ " Cell: " + this.CellId);
                 if(VehId == 1) {
-                    StoredOutFlow = 1;
-                     }
+                    StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
+                    this.OutFlow = StoredOutFlow;
+                    }
+                
                 double CellSize = this.link.getFFSpeed()*Params.dt/3600;
                 double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
                 double YCoord = 0;
