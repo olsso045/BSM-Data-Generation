@@ -49,8 +49,8 @@ public class Main {
         writer2 = new BufferedWriter(new FileWriter(CTMCellOutput));
         stringer2 = new StringBuilder();
         
-        stringer2.append("Time, Cell #, Inflow (vph), Previous Occupancy (# vehs), Outflow (vph), New Occupancy (# vehs), Density (veh/mi)\n");
-        
+        stringer2.append("Time, Cell #,  Outflow (vph), Occupancy (# vehs)\n");
+        //Inflow (vph), Previous Occupancy (# vehs), Density (veh/mi)
         writer2.write(stringer2.toString());
         
         String CTMVehicleOutputPartial = "D:\\BSM\\CTMVehicleOutputFiltered.csv";

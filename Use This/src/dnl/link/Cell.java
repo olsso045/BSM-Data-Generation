@@ -36,6 +36,7 @@ public class Cell
     private double en = 0.0;
     public double InFlow = 0.0;
     public double OutFlow = 0.0;
+    public int BlockedVeh = 0;
     
     public StringBuilder BSMOutput;
     public StringBuilder BSMOutputFiltered;
@@ -63,6 +64,7 @@ public class Cell
         this.link = link;
         this.Q = this.link.getCapacity()*Params.dt/3600;
         this.N = this.link.getNumLanes()*Params.JAM_DENSITY*this.link.getFFSpeed()*Params.dt/3600;
+       
         
         this.VehiclesInCell = new ArrayList();
         this.IntercellVehicleInFlow = new ArrayList();
@@ -109,6 +111,7 @@ public class Cell
         if(this.CellId == 3) { // to add a bottleneck to cell X for t seconds
             if(Params.time <= 275 && Params.time >= 245) {
                 OutFlow = 0;
+        //        System.out.println("Time: " + Params.time + ", Size: " + this.VehiclesInCell.size() + "\n");
                 //System.out.println("During this time, the outFlow is 0 for cell: "+ this.CellId);
             }
         }
@@ -117,6 +120,7 @@ public class Cell
         if(this.CellId == 4) { // to add a bottleneck to cell X-1 for t seconds
             if(Params.time <= 275 && Params.time >= 245) {
                 InFlow = 0;
+         //       System.out.println("Time: " + Params.time + ", Size: " + this.VehiclesInCell.size() + "\n");
                 //System.out.println("During this time, the InFlow is 0 for cell: "+ this.CellId);
             }
         }        
@@ -162,6 +166,12 @@ public class Cell
             Vehicle MoveVehicle = (Vehicle) this.IntercellVehicleOutFlow.get(i);
             this.VehiclesInCell.remove(MoveVehicle);
         }
+       
+        
+        if(Params.time == 276 && this.CellId == 4) {
+            this.BlockedVeh = ((Vehicle) this.IntercellVehicleInFlow.get(0)).getVehId();
+//            System.out.println(BlockedVeh.getVehId());
+            }
         
         this.IntercellVehicleInFlow = new ArrayList();
         this.IntercellVehicleOutFlow = new ArrayList();
@@ -174,7 +184,7 @@ public class Cell
         int StoredInFlow = (int) Math.floor(InFlow);
 
         InFlow = 0;
-        OutFlow = 0;
+        OutFlow = 0;    
         
         OccupancyOutput = new StringBuilder();
         int TimeStep = Params.time;
@@ -187,15 +197,15 @@ public class Cell
         OccupancyOutput.append(",");
         OccupancyOutput.append(CellNumber);
         OccupancyOutput.append(",");
-        OccupancyOutput.append(StoredInFlow);
-        OccupancyOutput.append(",");
-        OccupancyOutput.append(StoredEn);
-        OccupancyOutput.append(",");
+   //     OccupancyOutput.append(StoredInFlow);
+     //   OccupancyOutput.append(",");
+   //     OccupancyOutput.append(StoredEn);
+     //   OccupancyOutput.append(",");
         OccupancyOutput.append(StoredOutFlow);
         OccupancyOutput.append(",");
         OccupancyOutput.append(Occupancy);
-        OccupancyOutput.append(",");
-        OccupancyOutput.append(CellDensity);
+    //    OccupancyOutput.append(",");
+  //      OccupancyOutput.append(CellDensity);
         OccupancyOutput.append("\n");
         
         writer2.write(OccupancyOutput.toString()); 
@@ -212,12 +222,24 @@ public class Cell
                 int VehId = ((Vehicle)car).getVehId();
                 //System.out.println("Time: "+Params.time + " Vehicle: "+VehId+ " Cell: " + this.CellId);
                 if(VehId == 1) {
-                    StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
-                    this.OutFlow = StoredOutFlow;
-                }
+                    if(next!=null) {
+                        StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
+                        this.OutFlow = StoredOutFlow;
+                    }
+                    else{
+                        StoredOutFlow = (int)this.VehiclesInCell.size();
+                        this.OutFlow = StoredOutFlow;
+                        }
+                    }
+                    
                 double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
                 double YCoord = 0;
                 double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
+                if(Params.time >= 276) {
+                    if(VehId == 77 || VehId == 78) {
+                        Speed = (StoredInFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
+                        }
+                }
                 String Acceleration = "n/a";
                                                 
                 BSMOutput.append(VehId);
@@ -260,11 +282,11 @@ public class Cell
     
     public double getSendingFlow()
     {
-        return Math.min(Q, en);
+        return Math.min(Q, this.VehiclesInCell.size());
     }
     
     public double getReceivingFlow()
     {
-        return Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-en));  
+        return Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-this.VehiclesInCell.size()));  
     }
 }

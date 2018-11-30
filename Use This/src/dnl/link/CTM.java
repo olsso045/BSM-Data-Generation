@@ -87,7 +87,7 @@ public class CTM extends Link
             try {
                 section.update();
             } catch (Exception ex) {
-                System.out.println("There are some errors");
+      //          System.out.println("There are some errors");
             }
         }
     }
@@ -126,6 +126,7 @@ public class CTM extends Link
                      break;
                  }
                 else {
+          //          System.out.println("Vehicle: " + ((Vehicle) cells[CellNumber-1].VehiclesInCell.get(0)).getVehId());
                     cells[CellNumber-1].VehiclesInCell.remove(0);
                 }
                 }
