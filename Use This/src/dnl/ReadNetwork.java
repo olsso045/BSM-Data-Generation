@@ -10,6 +10,7 @@ import dnl.link.Link;
 import dnl.node.Node;
 import dnl.node.Sink;
 import dnl.node.Source;
+import dnl.node.Series;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class ReadNetwork
      * They are used to identify the Node subclass that is to be constructed.
      */
     public static final String SOURCE = "source";
+    public static final String SERIES = "series";
     public static final String SINK = "sink";
     
     /**
@@ -101,6 +103,10 @@ public class ReadNetwork
         else if(type.equalsIgnoreCase(SINK))
         {
             return new Sink(id, longitude, latitude, elevation);
+        }
+        else if(type.equalsIgnoreCase(SERIES))
+        {
+            return new Series(id, longitude, latitude, elevation);
         }
         else
         {

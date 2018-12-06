@@ -8,6 +8,7 @@ package dnl.link;
 import dnl.Params;
 import dnl.Vehicle;
 import dnl.node.Node;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,15 +33,16 @@ public class CTM extends Link
     private double length;
     public double shockwavespd;
     
-    
-    
-    
+    public List OutgoingVehicles;
+
     public CTM(int id, Node source, Node dest, double length, double ffspd, double capacityPerLane, int numLanes)
     {
         super(id, source, dest, length, ffspd, capacityPerLane, numLanes);
         
         this.ffspd = ffspd;
         this.length = length;
+        
+        this.OutgoingVehicles = new ArrayList();
         
         this.shockwavespd = 5.528008577;
         
@@ -115,6 +117,24 @@ public class CTM extends Link
         
     }
     
+    public void addFlowSeries(int y)
+    {
+        for(int i = 0; i < y; i++)
+            {       
+            if(this.OutgoingVehicles.isEmpty()){
+                     break;
+                 }
+            else {
+                Vehicle MoveVehicle = (Vehicle) this.OutgoingVehicles.get(i); 
+                cells[0].InFlow += 1;
+                MoveVehicle.setVehicleLocation(cells[0]);
+                cells[0].VehiclesInCell.add(MoveVehicle);
+            }
+            }
+    //    
+        
+    }
+    
     public void removeFlow(int y)
     {
         // fill this in
@@ -127,7 +147,10 @@ public class CTM extends Link
                  }
                 else {
           //          System.out.println("Vehicle: " + ((Vehicle) cells[CellNumber-1].VehiclesInCell.get(0)).getVehId());
+                    Vehicle MoveVehicle = (Vehicle) cells[CellNumber-1].VehiclesInCell.get(0);
+                    this.OutgoingVehicles.add(MoveVehicle);
                     cells[CellNumber-1].VehiclesInCell.remove(0);
+                //    System.out.println(OutgoingVehicles);
                 }
                 }
         //System.out.println("Remove flow    "+y+"   "+getId()+" "+Params.time);

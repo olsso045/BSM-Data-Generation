@@ -21,8 +21,6 @@ public class Series extends Node
         super(id, longitude, latitude, elevation);
     }
     
-    public double TransferFlow = 0.0;
-    
     
     public void step()
     {
@@ -37,20 +35,10 @@ public class Series extends Node
         Link us = getIncoming().get(0);
         Link ds = getOutgoing().get(0);
         
-        double TransferFlow = Math.floor(Math.min(us.getSendingFlow(), ds.getReceivingFlow()));
+        double y = Math.min(us.getSendingFlow(), ds.getReceivingFlow());
         
-        us.removeFlow((int) TransferFlow);
-        
-        for(int i = 0; i < TransferFlow; i++)
-            {       
-                if(this.prev.VehiclesInCell.isEmpty()) {
-                    break;
-                }
-                else {        
-                    Vehicle MoveVehicle = (Vehicle) this.prev.VehiclesInCell.get(i);
-                    this.IntercellVehicleInFlow.add(MoveVehicle);  
-                    
-        ds.addFlow((Vehicle) y);
+        us.removeFlow((int) y);
+        ds.addFlowSeries((int) y);
     }
     
     public void update()

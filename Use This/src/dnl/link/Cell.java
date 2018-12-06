@@ -108,23 +108,23 @@ public class Cell
             InFlow =  Math.floor(Math.min(prev.getSendingFlow(), this.getReceivingFlow()));
         }
         
-        if(this.CellId == 3) { // to add a bottleneck to cell X for t seconds
-            if(Params.time <= 275 && Params.time >= 245) {
-                OutFlow = 0;
+//        if(this.CellId == 3) { // to add a bottleneck to cell X for t seconds
+//            if(Params.time <= 275 && Params.time >= 245) {
+//                OutFlow = 0;
         //        System.out.println("Time: " + Params.time + ", Size: " + this.VehiclesInCell.size() + "\n");
                 //System.out.println("During this time, the outFlow is 0 for cell: "+ this.CellId);
-            }
-        }
+//            }
+//        }
         
-        
-        if(this.CellId == 4) { // to add a bottleneck to cell X-1 for t seconds
-            if(Params.time <= 275 && Params.time >= 245) {
-                InFlow = 0;
-         //       System.out.println("Time: " + Params.time + ", Size: " + this.VehiclesInCell.size() + "\n");
-                //System.out.println("During this time, the InFlow is 0 for cell: "+ this.CellId);
-            }
-        }        
-        
+//        
+//        if(this.CellId == 4) { // to add a bottleneck to cell X-1 for t seconds
+//            if(Params.time <= 275 && Params.time >= 245) {
+//                InFlow = 0;
+//         //       System.out.println("Time: " + Params.time + ", Size: " + this.VehiclesInCell.size() + "\n");
+//                //System.out.println("During this time, the InFlow is 0 for cell: "+ this.CellId);
+//            }
+//        }        
+//        
         if(prev!=null) {
             for(int i = 0; i < Math.floor(InFlow); i++)
             {       
@@ -168,10 +168,10 @@ public class Cell
         }
        
         
-        if(Params.time == 276 && this.CellId == 4) {
-            this.BlockedVeh = ((Vehicle) this.IntercellVehicleInFlow.get(0)).getVehId();
+  //      if(Params.time == 276 && this.CellId == 4) {
+    //        this.BlockedVeh = ((Vehicle) this.IntercellVehicleInFlow.get(0)).getVehId();
 //            System.out.println(BlockedVeh.getVehId());
-            }
+   //         }
         
         this.IntercellVehicleInFlow = new ArrayList();
         this.IntercellVehicleOutFlow = new ArrayList();
@@ -197,10 +197,10 @@ public class Cell
         OccupancyOutput.append(",");
         OccupancyOutput.append(CellNumber);
         OccupancyOutput.append(",");
-   //     OccupancyOutput.append(StoredInFlow);
-     //   OccupancyOutput.append(",");
-   //     OccupancyOutput.append(StoredEn);
-     //   OccupancyOutput.append(",");
+        OccupancyOutput.append(StoredInFlow);
+        OccupancyOutput.append(",");
+        OccupancyOutput.append(StoredEn);
+        OccupancyOutput.append(",");
         OccupancyOutput.append(StoredOutFlow);
         OccupancyOutput.append(",");
         OccupancyOutput.append(Occupancy);
@@ -221,25 +221,25 @@ public class Cell
 //                }
                 int VehId = ((Vehicle)car).getVehId();
                 //System.out.println("Time: "+Params.time + " Vehicle: "+VehId+ " Cell: " + this.CellId);
-                if(VehId == 1) {
-                    if(next!=null) {
-                        StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
-                        this.OutFlow = StoredOutFlow;
-                    }
-                    else{
-                        StoredOutFlow = (int)this.VehiclesInCell.size();
-                        this.OutFlow = StoredOutFlow;
-                        }
-                    }
+//                if(VehId == 1) {
+//                    if(next!=null) {
+//                        StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
+//                        this.OutFlow = StoredOutFlow;
+//                    }
+//                    else{
+//                        StoredOutFlow = (int)this.VehiclesInCell.size();
+//                        this.OutFlow = StoredOutFlow;
+//                        }
+//                    }
                     
                 double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
                 double YCoord = 0;
                 double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
-                if(Params.time >= 276) {
-                    if(VehId == 77 || VehId == 78) {
-                        Speed = (StoredInFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
-                        }
-                }
+//                if(Params.time >= 276) {
+//                    if(VehId == 77 || VehId == 78) {
+//                        Speed = (StoredInFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
+//                        }
+//                }
                 String Acceleration = "n/a";
                                                 
                 BSMOutput.append(VehId);
@@ -258,7 +258,7 @@ public class Cell
                 writer.write(BSMOutput.toString()); 
                 
                 int RandomizedId = ((Vehicle)car).getVehRandomizedId();
-                double PenetrationRate = 64.0; // enter percentage as a whole number not a decimal
+                double PenetrationRate = 60.0; // enter percentage as a whole number not a decimal
                         
                 if(RandomizedId <= PenetrationRate) {
                     BSMOutputFiltered.append(VehId);

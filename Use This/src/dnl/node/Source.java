@@ -131,6 +131,7 @@ public class Source extends Node
         public int getSendingFlow(){return 0;}
         public int getReceivingFlow(){return 0;}
         public void addFlow(Vehicle y){}
+        public void addFlowSeries(int y){}
         public void removeFlow(int y){}
     };
     

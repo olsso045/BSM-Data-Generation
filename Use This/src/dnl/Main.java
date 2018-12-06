@@ -49,7 +49,7 @@ public class Main {
         writer2 = new BufferedWriter(new FileWriter(CTMCellOutput));
         stringer2 = new StringBuilder();
         
-        stringer2.append("Time, Cell #,  Outflow (vph), Occupancy (# vehs)\n");
+        stringer2.append("Time, Cell #, Inflow, Prev Occ, Outflow (vph), Occupancy (# vehs)\n");
         //Inflow (vph), Previous Occupancy (# vehs), Density (veh/mi)
         writer2.write(stringer2.toString());
         

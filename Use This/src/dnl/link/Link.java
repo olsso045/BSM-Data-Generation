@@ -179,7 +179,7 @@ public abstract class Link implements Comparable<Link>
      */
     public abstract void addFlow(Vehicle y);
     
-    
+    public abstract void addFlowSeries(int y);
     
     /**
      * Removes the given flow (in veh, for a single time step) from the downstream end of the link.
