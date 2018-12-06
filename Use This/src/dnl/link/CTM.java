@@ -8,11 +8,11 @@ package dnl.link;
 import dnl.Params;
 import dnl.Vehicle;
 import dnl.node.Node;
+import dnl.link.Link;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 
 /**
@@ -33,7 +33,8 @@ public class CTM extends Link
     private double length;
     public double shockwavespd;
     
-    public List OutgoingVehicles;
+    public static List OutgoingVehicles;
+    
 
     public CTM(int id, Node source, Node dest, double length, double ffspd, double capacityPerLane, int numLanes)
     {
@@ -122,13 +123,16 @@ public class CTM extends Link
         for(int i = 0; i < y; i++)
             {       
             if(this.OutgoingVehicles.isEmpty()){
-                     break;
+        //        System.out.println(Params.time);
+                break;
                  }
             else {
-                Vehicle MoveVehicle = (Vehicle) this.OutgoingVehicles.get(i); 
+           //     System.out.println(Params.time);
+                Vehicle MoveVehicle = (Vehicle) this.OutgoingVehicles.get(0); 
                 cells[0].InFlow += 1;
                 MoveVehicle.setVehicleLocation(cells[0]);
                 cells[0].VehiclesInCell.add(MoveVehicle);
+                this.OutgoingVehicles.remove(i);
             }
             }
     //    
@@ -150,11 +154,30 @@ public class CTM extends Link
                     Vehicle MoveVehicle = (Vehicle) cells[CellNumber-1].VehiclesInCell.get(0);
                     this.OutgoingVehicles.add(MoveVehicle);
                     cells[CellNumber-1].VehiclesInCell.remove(0);
-                //    System.out.println(OutgoingVehicles);
+                    
                 }
                 }
         //System.out.println("Remove flow    "+y+"   "+getId()+" "+Params.time);
         
     }
    // }
+    public void removeFlowSink(int y)
+    {
+        // fill this in
+        
+            cells[CellNumber-1].OutFlow += y;
+            for(int i = 0; i < y; i++)
+                {
+                if(cells[CellNumber-1].VehiclesInCell.isEmpty()){
+                     break;
+                 }
+                else {
+          //          System.out.println("Vehicle: " + ((Vehicle) cells[CellNumber-1].VehiclesInCell.get(0)).getVehId());
+                    cells[CellNumber-1].VehiclesInCell.remove(0);
+                    
+                }
+                }
+        //System.out.println("Remove flow    "+y+"   "+getId()+" "+Params.time);
+        
+    }
 }

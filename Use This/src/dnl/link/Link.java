@@ -18,7 +18,7 @@ import dnl.node.Node;
 public abstract class Link implements Comparable<Link>
 {
     // id used to reference the link
-    private int id;
+    public int id;
     
     // stores the upstream and downstream nodes
     private Node source, dest;
@@ -188,6 +188,8 @@ public abstract class Link implements Comparable<Link>
      * @param y 
      */
     public abstract void removeFlow(int y);
+    
+    public abstract void removeFlowSink(int y);
     
     /**
      * Returns the maximum flow that could exit the link in the next time step (in veh)

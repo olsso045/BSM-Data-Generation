@@ -30,7 +30,7 @@ public class Sink extends Node
         {
             double y = us.getSendingFlow();
             exiting += y;
-            us.removeFlow((int) y);
+            us.removeFlowSink((int) y);
         }
         //System.out.println(this.getNumExiting());
     }

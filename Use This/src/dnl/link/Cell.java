@@ -12,6 +12,7 @@ import static dnl.Main.stringer3;
 import static dnl.Main.writer3;
 import dnl.Params;
 import dnl.Vehicle;
+import dnl.link.Link;
 import dnl.node.Source;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -189,11 +190,14 @@ public class Cell
         OccupancyOutput = new StringBuilder();
         int TimeStep = Params.time;
         int CellNumber = this.CellId;
+        int LinkNumber = this.link.getId();
         double CellSize = this.link.getFFSpeed()*Params.dt/3600;
         double Occupancy = Math.round(en);
         double CellDensity = (Occupancy/CellSize);
         
         OccupancyOutput.append(TimeStep);
+        OccupancyOutput.append(",");
+        OccupancyOutput.append(LinkNumber);
         OccupancyOutput.append(",");
         OccupancyOutput.append(CellNumber);
         OccupancyOutput.append(",");
@@ -221,18 +225,25 @@ public class Cell
 //                }
                 int VehId = ((Vehicle)car).getVehId();
                 //System.out.println("Time: "+Params.time + " Vehicle: "+VehId+ " Cell: " + this.CellId);
-//                if(VehId == 1) {
-//                    if(next!=null) {
-//                        StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
-//                        this.OutFlow = StoredOutFlow;
-//                    }
-//                    else{
-//                        StoredOutFlow = (int)this.VehiclesInCell.size();
-//                        this.OutFlow = StoredOutFlow;
-//                        }
-//                    }
-                    
-                double CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord
+                if(VehId == 1) {
+                    if(next!=null) {
+                        StoredOutFlow = Math.min((int)this.VehiclesInCell.size(),(int)this.next.getReceivingFlow());
+                        this.OutFlow = StoredOutFlow;
+                    }
+                    else{
+                        StoredOutFlow = (int)this.VehiclesInCell.size();
+                        this.OutFlow = StoredOutFlow;
+                        }
+                    }
+                double CurrentCell = 0;
+                if(this.link.getId() == 23) {
+                    CurrentCell = (this.CellId)*CellSize-CellSize/2 + this.link.getLength();
+                }
+                else {
+                    CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord        
+                            }
+                
+                
                 double YCoord = 0;
                 double Speed = (StoredOutFlow*3600/Params.dt)/(this.VehiclesInCell.size()/CellSize);
 //                if(Params.time >= 276) {

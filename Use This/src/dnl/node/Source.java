@@ -133,6 +133,7 @@ public class Source extends Node
         public void addFlow(Vehicle y){}
         public void addFlowSeries(int y){}
         public void removeFlow(int y){}
+        public void removeFlowSink(int y){}
     };
     
     public void storeTurningProportion(Link i, Link j, double p)
