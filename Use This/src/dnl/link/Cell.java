@@ -269,7 +269,7 @@ public class Cell
                 writer.write(BSMOutput.toString()); 
                 
                 int RandomizedId = ((Vehicle)car).getVehRandomizedId();
-                double PenetrationRate = 60.0; // enter percentage as a whole number not a decimal
+                double PenetrationRate = 65.0; // enter percentage as a whole number not a decimal
                         
                 if(RandomizedId <= PenetrationRate) {
                     BSMOutputFiltered.append(VehId);
@@ -298,6 +298,12 @@ public class Cell
     
     public double getReceivingFlow()
     {
-        return Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-this.VehiclesInCell.size()));  
+        int LinkIDE = this.link.getId();
+        //System.out.println(Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-this.VehiclesInCell.size())));
+   //     if(LinkIDE == 23) {
+        
+   //         System.out.println(Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-this.VehiclesInCell.size())));
+    //    }
+        return Math.round(Math.min(Q, Math.min(link.getFFSpeed(),link.shockwavespd)/Math.max(link.getFFSpeed(),link.shockwavespd)*(N-this.VehiclesInCell.size())));  
     }
 }

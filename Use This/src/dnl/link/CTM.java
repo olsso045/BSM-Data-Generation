@@ -31,6 +31,7 @@ public class CTM extends Link
     private int CellNumber;
     private double ffspd;
     private double length;
+    private double capacity;
     public double shockwavespd;
     
     public static List OutgoingVehicles;
@@ -43,9 +44,11 @@ public class CTM extends Link
         this.ffspd = ffspd;
         this.length = length;
         
-        this.OutgoingVehicles = new ArrayList();
+        this.capacity = capacityPerLane*numLanes;
         
-        this.shockwavespd = 5.528008577;
+        this.OutgoingVehicles = new ArrayList();
+ 
+        this.shockwavespd = -1*capacity/(capacity/ffspd - Params.JAM_DENSITY);
         
         double qualifier = Math.max(this.ffspd, this.shockwavespd);
                 
