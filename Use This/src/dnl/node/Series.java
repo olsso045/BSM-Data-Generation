@@ -37,21 +37,14 @@ public class Series extends Node
         
         int y = (Math.min(us.getSendingFlow(), ds.getReceivingFlow()));
         
-                System.out.println(us.getSendingFlow()+" "+ ds.getReceivingFlow());
-
-     
+        System.out.println(us.getSendingFlow() +"," +ds.getReceivingFlow());
+        
+        us.removeFlow(y);
+        ds.addFlowSeries(y);
     }
     
     public void update()
     {
-               Link us = getIncoming().get(0);
-        Link ds = getOutgoing().get(0);
-        
-        int y = (Math.min(us.getSendingFlow(), ds.getReceivingFlow()));
-        
-            //   System.out.println(us.getSendingFlow()+" "+ ds.getReceivingFlow());
-
-       us.removeFlow(y);
-        ds.addFlowSeries(y); // nothing to do here
+        // nothing to do here
     }
 }
