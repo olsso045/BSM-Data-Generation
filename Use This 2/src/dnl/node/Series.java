@@ -21,6 +21,7 @@ public class Series extends Node
     public Series(int id, double longitude, double latitude, double elevation)
     {
         super(id, longitude, latitude, elevation);
+        
     }
     
     
@@ -39,6 +40,7 @@ public class Series extends Node
         
         Link us = getIncoming().get(0);
         Link ds = getOutgoing().get(0);
+        
         
         int y = (Math.min(us.getSendingFlow(), ds.getReceivingFlow()));
         

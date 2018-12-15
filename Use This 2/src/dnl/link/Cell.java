@@ -55,6 +55,7 @@ public class Cell
      */
     private Cell prev, next;
     public List OutgoingVehicles;
+    public double FirstLinkLength;
     
     /**
      * Constructs a Cell as part of the given CTM link.
@@ -64,6 +65,8 @@ public class Cell
     public Cell(CTM link)
     {
         this.link = link;
+
+        
         this.Q = this.link.getCapacity()*Params.dt/3600;
         this.N = this.link.getNumLanes()*Params.JAM_DENSITY*this.link.getFFSpeed()*Params.dt/3600;
        
@@ -190,6 +193,7 @@ public class Cell
         
         int StoredOutFlow = (int) Math.floor(OutFlow);
         int StoredInFlow = (int) Math.floor(InFlow);
+       
 
         InFlow = 0;
         OutFlow = 0;    
@@ -227,6 +231,11 @@ public class Cell
             for (Object car : this.VehiclesInCell) {
                 BSMOutput = new StringBuilder();
                 BSMOutputFiltered = new StringBuilder();
+                
+                int NumbVehsInCell = this.VehiclesInCell.size();
+                int PlaceInCell = this.VehiclesInCell.indexOf(car);
+
+                
 //                if(Params.time == 6){
        //             System.out.println(this.VehiclesInCell.get(0) + "," + this.CellId);
 //                }
@@ -242,12 +251,17 @@ public class Cell
                         this.OutFlow = StoredOutFlow;
                         }
                     }
-                double CurrentCell = 0;
+                
+                
+                double CurrentXPos;
+                double CurrentCell = (this.CellId);
                 if(this.link.getId() == 23) {
-                    CurrentCell = (this.CellId)*CellSize-CellSize/2 + this.link.getLength();
+    //                System.out.println(FirstLinkLength);
+                    CurrentXPos = (this.CellId)*CellSize-CellSize/NumbVehsInCell*PlaceInCell + 0.75; //CHANGE THIS NUMBER FOR EACH SCENARIO
+                    //CellSize/2 + 0.75; 
                 }
                 else {
-                    CurrentCell = (this.CellId)*CellSize-CellSize/2; // this is x-coord        
+                    CurrentXPos = (this.CellId)*CellSize-CellSize/NumbVehsInCell*PlaceInCell; // this is x-coord        
                             }
                 
                 
@@ -264,16 +278,20 @@ public class Cell
                 BSMOutput.append(",");
                 BSMOutput.append(TimeStep);
                 BSMOutput.append(",");
-                BSMOutput.append(CurrentCell);
+                BSMOutput.append(CurrentXPos);
                 BSMOutput.append(",");
                 BSMOutput.append(YCoord);
                 BSMOutput.append(",");
                 BSMOutput.append(Speed);
                 BSMOutput.append(",");
                 BSMOutput.append(Acceleration);
+        //        BSMOutput.append(",");
+          //      BSMOutput.append(CurrentCell);
                 BSMOutput.append("\n");
         
                 writer.write(BSMOutput.toString()); 
+                
+  //              System.out.println(CellSize);
                 
                 int RandomizedId = ((Vehicle)car).getVehRandomizedId();
                 double PenetrationRate = 65.0; // enter percentage as a whole number not a decimal
@@ -283,13 +301,15 @@ public class Cell
                     BSMOutputFiltered.append(",");
                     BSMOutputFiltered.append(TimeStep);
                     BSMOutputFiltered.append(",");
-                    BSMOutputFiltered.append(CurrentCell);
+                    BSMOutputFiltered.append(CurrentXPos);
                     BSMOutputFiltered.append(",");
                     BSMOutputFiltered.append(YCoord);
                     BSMOutputFiltered.append(",");
                     BSMOutputFiltered.append(Speed);
                     BSMOutputFiltered.append(",");
                     BSMOutputFiltered.append(Acceleration);
+          //          BSMOutputFiltered.append(",");
+            //        BSMOutputFiltered.append(CurrentCell);
                     BSMOutputFiltered.append("\n");
                     
                     writer3.write(BSMOutputFiltered.toString());

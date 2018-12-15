@@ -33,6 +33,7 @@ public class CTM extends Link
     private double length;
     private double capacity;
     public double shockwavespd;
+    public double FirstLinkLength;
     
     public static List OutgoingVehicles;
 
@@ -44,7 +45,6 @@ public class CTM extends Link
         this.length = length;
         
         this.capacity = capacityPerLane*numLanes;
-        
         
  
         this.shockwavespd = -1*capacity/(capacity/ffspd - Params.JAM_DENSITY);
